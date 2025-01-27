@@ -1,0 +1,84 @@
+<div class="card">
+    <p-table
+      (onPage)="changePage($event)"
+      [value]="ingredients"
+      [(selection)]="selectedIngredients"
+      [tableStyle]="{ 'min-width': '50rem' }"
+      [paginator]="true"
+      [rows]="size"
+      class="w-full"
+    >
+        <ng-template #caption>
+            <div class="flex items-center justify-between">
+                <span class="text-xl font-bold">Ingredientes</span>
+            </div>
+        </ng-template>
+        <ng-template #header>
+            <tr>
+                <th>
+                </th>
+                <th>
+                    <p-columnFilter
+                        [showMenu]="false"
+                        type="text"
+                        field="code"
+                        placeholder="Pesquise pelo código"
+                    ></p-columnFilter>
+                </th>
+                <th>
+                    <p-columnFilter
+                        [showMenu]="false"
+                        type="text"
+                        field="description"
+                        placeholder="Pesquise pela descrição"
+                    ></p-columnFilter>
+                </th>
+                <th>
+                </th>
+                <th>
+                    <p-speeddial [model]="items" direction="left" />
+                </th>
+            </tr>
+            <tr class="w-full">
+                <th style="width: 4rem"><p-tableHeaderCheckbox /></th>
+                <th class="w-2/6">Código</th>
+                <th class="w-2/6">Descrição</th>
+                <th class="w-2/6" pSortableColumn="price">Preço <p-sortIcon field="price" /></th>
+                <th class="w-2/6">Adicional</th>
+            </tr>
+        </ng-template>
+        <ng-template #body let-ingredient>
+            <tr>
+                <td>
+                    <p-tableCheckbox [value]="ingredient" />
+                </td>
+                <td>{{ ingredient.code }}</td>
+                <td>{{ ingredient.description }}</td>
+                <td>{{ ingredient.price | currency:'BRL':'symbol':'1.2-2' }}</td>
+                <td>
+                    <p-chip 
+                      label="{{ingredient.isAdditional ? 'Sim' : 'Não'}}" 
+                      icon="pi {{ingredient.isAdditional ? 'pi-check-square' : 'pi-times'}}" 
+                      [class.bg-primary-400]="ingredient.isAdditional"
+                      [class.bg-red-400]="!ingredient.isAdditional"
+                    />
+                </td>
+                <td>
+                    <!-- <p-button (onClick)="displayProduct($event, product)" icon="pi pi-search" severity="secondary" rounded /> -->
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
+
+<app-insert-modal
+  *ngIf="insertModalVisible"
+  title="Inserir Ingrediente"
+  [visible]="insertModalVisible"
+  (visibleEventEmitter)="insertModalVisible = $event"
+  (saveEventEmitter)="save($event)"
+  [fields]="fields"
+  [updateObject]="selectedIngredients[0] || null"
+/>
+
+<p-toast />

@@ -1,0 +1,65 @@
+<p-dialog [(visible)]="visible" [modal]="true" [style]="{ width: '25rem' }" [header]="title" (visibleChange)="changeVisible()">
+    <ng-container *ngFor="let field of fields">
+        <div 
+          *ngIf="field.type === 'text' || field.type === 'number' || field.type === 'email' || field.type === 'password'"
+          class="w-full flex items-center gap-4 mb-4"
+        >
+            <input 
+                pInputText 
+                [type]="field.type" 
+                [id]="field.name" 
+                name="{{field.name}}" 
+                class="flex-auto" 
+                autocomplete="off" 
+                [placeholder]="field.placeholder" 
+                pSize="large" 
+                [(ngModel)]="formData[field.name]"
+            />
+        </div>
+        <div *ngIf="field.type === 'money'" class="w-full flex items-center gap-4 mb-4">
+            <p-inputnumber
+                size="large"
+                [placeholder]="field.placeholder"
+                mode="currency"
+                currency="BRL"
+                locale="pt-BR"
+                class="w-full"
+                [(ngModel)]="formData[field.name]"
+            />
+        </div>
+        <div *ngIf="field.type === 'select'" class="w-full flex items-center gap-4 mb-4">
+            <p-select 
+                [options]="field.options" 
+                name="{{field.name}}" 
+                optionLabel="name" 
+                [placeholder]="field.placeholder" 
+                class="w-full" 
+                [(ngModel)]="formData[field.name]"
+            ></p-select>
+        </div>
+        <div *ngIf="field.type === 'multiSelect'" class="w-full flex items-center gap-4 mb-4">
+            <p-multiselect 
+                [options]="field.options" 
+                [(ngModel)]="formData[field.name]"
+                optionLabel="name" 
+                [placeholder]="field.placeholder" 
+                styleClass="w-full" 
+            />
+        </div>
+        <div *ngIf="field.type === 'textarea'" class="w-full flex items-center gap-4 mb-4">
+            <textarea
+              pTextarea
+              [(ngModel)]="formData[field.name]"
+              pSize="large"
+              [placeholder]="field.placeholder" 
+              styleClass="w-full" 
+              rows="10"
+            >
+            </textarea>
+        </div>
+    </ng-container>
+    <ng-template #footer>
+        <p-button label="Cancel" [text]="true" severity="secondary" (click)="changeVisible()" />
+        <p-button label="Save" [outlined]="true" severity="secondary" (click)="save()" />
+    </ng-template>
+</p-dialog>

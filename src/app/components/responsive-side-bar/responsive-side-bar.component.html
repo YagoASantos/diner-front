@@ -1,0 +1,6 @@
+<p-drawer #drawerRef [(visible)]="visible">
+    <ng-template #headless>
+        <app-side-bar />
+    </ng-template>
+</p-drawer>
+<p-button (click)="visible = true" icon="pi pi-bars" />
