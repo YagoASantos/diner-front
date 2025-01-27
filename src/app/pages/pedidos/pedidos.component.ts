@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { InsertModalComponent } from "../../components/insert-modal/insert-modal.component";
 import { TableModule } from 'primeng/table';
 import { SpeedDialModule } from 'primeng/speeddial';
 import { Iorder } from '../../interfaces/order';
@@ -17,10 +16,11 @@ import { Idrink } from '../../interfaces/drink';
 import { Iclient } from '../../interfaces/client';
 import { DialogModule } from 'primeng/dialog';
 import { FormsModule } from '@angular/forms';
+import { CreateOrderComponent } from "../../components/create-order/create-order.component";
 
 @Component({
   selector: 'app-pedidos',
-  imports: [InsertModalComponent, TableModule, SpeedDialModule, ButtonModule, ToastModule, CommonModule, DescribeModalComponent, DialogModule, FormsModule],
+  imports: [TableModule, SpeedDialModule, ButtonModule, ToastModule, CommonModule, DescribeModalComponent, DialogModule, FormsModule, CreateOrderComponent],
   templateUrl: './pedidos.component.html',
   styleUrl: './pedidos.component.scss',
   providers: [MessageService]
@@ -84,22 +84,70 @@ export class PedidosComponent implements OnInit {
     });
   }
 
-  // save(ev: any) {
-  //   const body: Iorder = {
-  //     description: ev.description,
-  //     client: {
-  //       code: ev.client.code,
-  //       name: ev.client.name,
-  //       phone: ev.client.phone,
-  //     },
-  //     hamburgers: [ev.hamburgers],
-  //     drinks: [ev.drinks],
-  //     observations: [ev.observation],
-  //     orderDate: ev.orderDate,
-  //     totalPrice: ev.totalPrice
-  //   } 
+  save(ev: any) {
+    const body: Iorder = {
+      description: ev.description,
+      client: ev.client.code,
+      hamburgers: ev.hamburgers.map((hamburger: any) => ({
+        code: hamburger.code,
+        quantity: hamburger.quantity
+      })),
+      drinks: ev.drinks.map((drink: any) => ({
+        code: drink.code,
+        quantity: drink.quantity
+      })),
+      observations: ev.observations.map((observation: any) => ({
+        message: observation.message
+      })),
+      orderDate: ev.orderDate
+    }
 
-  // }
+    console.log(body);
+
+    if (!this.validateFields(body)) {
+      return;
+    }
+
+    this.orderService.post(body).subscribe({
+      next: () => {
+        this.getAll();
+        this.insertModalVisible = false;
+        this.messageService.add({ severity: 'success', summary: 'Sucesso!', detail: 'Registro salvo' });
+      },
+      error: error => console.log(error)
+    });
+
+  }
+
+
+  validateFields(body: Iorder) {
+    if (body.description == null || body.description.trim() == '') {
+      this.messageService.add({ severity: 'error', summary: 'Erro!', detail: 'Campo descrição é obrigatório' });
+      return false;
+    }
+
+    if (body.client == null) {
+      this.messageService.add({ severity: 'error', summary: 'Erro!', detail: 'Campo cliente é obrigatório' });
+      return false;
+    }
+
+    if (body.hamburgers == null || body.hamburgers.length == 0) {
+      this.messageService.add({ severity: 'error', summary: 'Erro!', detail: 'Campo hambúrgueres é obrigatório' });
+      return false;
+    }
+
+    if (body.drinks == null || body.drinks.length == 0) {
+      this.messageService.add({ severity: 'error', summary: 'Erro!', detail: 'Campo bebidas é obrigatório' });
+      return false;
+    }
+
+    if (body.orderDate == null) {
+      this.messageService.add({ severity: 'error', summary: 'Erro!', detail: 'Campo data do pedido é obrigatório' });
+      return false;
+    }
+
+    return true;
+  }
 
   getAll() {
   this.orderService.getAll(this.page, this.size).subscribe({
@@ -179,7 +227,7 @@ export class PedidosComponent implements OnInit {
     this.selectedOrders = [];
     this.selectedOrders[0] = order;
     this.fieldsDescription = [];
-    this.createFieldsClients(order.client);
+    this.createFieldsClients(order.client!);
     this.describeModalVisible = true;
   }
 
@@ -197,7 +245,7 @@ export class PedidosComponent implements OnInit {
       this.fieldsDescription.push({
         content: hamburger.description,
         labelContent: "Hambúrguer",
-        quantity: hamburger.quantityOfHamburgers
+        quantity: hamburger.quantity
       })
     })
   }
@@ -217,7 +265,7 @@ export class PedidosComponent implements OnInit {
       this.fieldsDescription.push({
         content: drink.description,
         labelContent: "Bebida",
-        quantity: drink.quantityOfDrinks
+        quantity: drink.quantity
       })
     })
   }

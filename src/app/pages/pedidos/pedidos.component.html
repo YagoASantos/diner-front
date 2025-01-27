@@ -84,22 +84,18 @@
     </p-table>
 </div>
 
-<!-- <app-insert-modal
-  *ngIf="insertModalVisible"
-  title="Inserir Pedido"
-  [visible]="insertModalVisible"
-  (visibleEventEmitter)="insertModalVisible = $event"
-  (saveEventEmitter)="save($event)"
-  [fields]="fields"
-  [updateObject]="selectedOrders[0] || null"
-/> -->
-
-<app-describe-modal 
-*ngIf="describeModalVisible"
-title="Descrição"
-[fields]="fieldsDescription"
-[visible]="describeModalVisible"
-(visibleEventEmitter)="describeModalVisible = $event"
+<app-create-order 
+    *ngIf="insertModalVisible"
+    [visible]="insertModalVisible"
+    (saveEventEmitter)="save($event)"
+    (visibleEventEmitter)="insertModalVisible = $event"
 />
 
+<app-describe-modal 
+    *ngIf="describeModalVisible"
+    title="Descrição"
+    [fields]="fieldsDescription"
+    [visible]="describeModalVisible"
+    (visibleEventEmitter)="describeModalVisible = $event"
+/>
 <p-toast />

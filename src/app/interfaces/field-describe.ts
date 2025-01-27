@@ -1,5 +1,5 @@
 export interface FieldDescribe {
-    content: String,
+    content?: String,
     labelContent: String,
     quantity?: number
 }

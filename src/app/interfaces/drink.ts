@@ -5,7 +5,7 @@ export interface Idrink {
     description: string;
     price: number;
     haveSugar: boolean;
-    quantityOfDrinks?: number;
+    quantity?: number;
 }
 
 export interface IdrinkPage extends Ipage {

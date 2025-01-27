@@ -6,12 +6,12 @@ import { Idrink } from "./drink";
 export interface Iorder {
     code?: number;
     description: string;
-    client: Iclient;
+    client: Iclient | null;
     hamburgers: Ihamburger[];
     drinks: Idrink[];
     observations: { message: string }[];
     orderDate: string;
-    totalPrice: number;
+    totalPrice?: number;
 }
 
 export interface IorderPage extends Ipage {

@@ -1,151 +1,80 @@
-<p-dialog
-  header="Cadastro de Pedido"
-  [(visible)]="displayModal"
-  [modal]="true"
-  [closable]="false"
-  [style]="{ width: '50vw' }"
->
-  <form (ngSubmit)="save()">
-    <div class="p-fluid">
-      <!-- Descrição do pedido -->
-      <div class="p-field">
-        <label for="description">Descrição</label>
-        <input
-          id="description"
-          type="text"
-          [(ngModel)]="pedido.description"
-          name="description"
-          pInputText
-          required
-        />
-      </div>
-
-      <!-- Cliente -->
-      <div class="p-field">
-        <label for="client">Cliente</label>
-        <input
-          id="client"
-          type="text"
-          [(ngModel)]="pedido.client"
-          name="client"
-          pInputText
-          required
-        />
-      </div>
-
-      <!-- Hambúrgueres (dinâmico) -->
-      <h3>Hambúrgueres</h3>
-      <div *ngFor="let item of pedido.hamburgers; let i = index" class="p-field">
-        <div class="p-inputgroup">
-          <p-dropdown
-            [options]="hamburgers"
-            [(ngModel)]="item.hamburger"
-            [name]="'hamburger' + i"
-            optionLabel="name"
-            placeholder="Selecione o Hambúrguer"
-          ></p-dropdown>
-
-          <input
-            type="number"
-            min="1"
-            [(ngModel)]="item.quantity"
-            [name]="'quantityHamburger' + i"
-            pInputText
-            placeholder="Quantidade"
-            style="width: 100px"
-          />
-
-          <button
-            type="button"
-            pButton
-            icon="pi pi-minus"
-            class="p-button-danger"
-            (click)="removeHamburger(i)"
-          ></button>
+<div class="bg-slate-700">
+    <p-dialog [(visible)]="visible" [modal]="true" [style]="{ width: '30rem' }" header="Cadastro de Pedidos" (visibleChange)="changeVisible()">
+        <span class="p-text-secondary block mb-10">Pedido</span>
+        <div class="flex items-center gap-4 mb-4 ">
+            <label for="description" class="font-semibold w-24">Descrição</label>
+            <input
+                [(ngModel)]="order.description"
+                pInputText
+                id="description" 
+                class="flex-auto border-4" 
+                autocomplete="off" 
+            />
         </div>
-      </div>
-
-      <!-- Botão para adicionar hambúrgueres -->
-      <button
-        type="button"
-        pButton
-        icon="pi pi-plus"
-        label="Adicionar Hambúrguer"
-        class="p-button-primary"
-        (click)="addHamburger()"
-      ></button>
-
-      <!-- Bebidas (dinâmico) -->
-      <h3>Bebidas</h3>
-      <div *ngFor="let item of pedido.drinks; let i = index" class="p-field">
-        <div class="p-inputgroup">
-          <p-dropdown
-            [options]="drinks"
-            [(ngModel)]="item.drink"
-            [name]="'drink' + i"
-            optionLabel="name"
-            placeholder="Selecione a Bebida"
-          ></p-dropdown>
-
-          <input
-            type="number"
-            min="1"
-            [(ngModel)]="item.quantity"
-            [name]="'quantityDrink' + i"
-            pInputText
-            placeholder="Quantidade"
-            style="width: 100px"
-          />
-
-          <button
-            type="button"
-            pButton
-            icon="pi pi-minus"
-            class="p-button-danger"
-            (click)="removeDrink(i)"
-          ></button>
+        <div class="flex items-center gap-4 mb-8">
+            <label for="client" class="font-semibold w-24">Cliente</label>
+            <p-select 
+                optionLabel="name"
+                placeholder=""
+                [(ngModel)]="order.client" 
+                [options]="clientsOptions" 
+                class="flex-auto border-4"
+            />
         </div>
-      </div>
+        <div class="mb-8">
+            <label class="font-semibold w-24 block mb-2">Hambúrgueres</label>
+            <div *ngFor="let hamburger of hamburgersFields; let i = index" class="flex items-center gap-4 mb-2">
+                <p-select
+                    optionLabel="description" 
+                    placeholder="Nome do Hambúrguer"
+                    [(ngModel)]="order.hamburgers[i]" 
+                    [options]="hamburgersOptions" 
+                    class="flex-auto border-4"
+                >
+                </p-select>
+                <input type="number" [(ngModel)]="order.hamburgers[i]!.quantity" placeholder="Qtd" class="w-24 text-center border-4" />
+                <button type="button" pButton icon="pi pi-trash" (click)="removeHamburger(i)" severity="danger" class="p-button-sm"></button>
+            </div>
+            <button type="button" pButton icon="pi pi-plus" label="Adicionar" (click)="addHamburger()" severity="secondary" class="mt-2"></button>
+        </div>
 
-      <!-- Botão para adicionar bebidas -->
-      <button
-        type="button"
-        pButton
-        icon="pi pi-plus"
-        label="Adicionar Bebida"
-        class="p-button-primary"
-        (click)="addDrink()"
-      ></button>
-
-      <!-- Observações -->
-      <div class="p-field">
-        <label for="observations">Observações</label>
-        <textarea
-          id="observations"
-          rows="4"
-          [(ngModel)]="pedido.observations"
-          name="observations"
-          pInputTextarea
-        ></textarea>
-      </div>
-    </div>
-
-    <p-footer>
-      <button
-        type="submit"
-        pButton
-        label="Salvar"
-        class="p-button-success"
-        icon="pi pi-check"
-      ></button>
-      <button
-        type="button"
-        pButton
-        label="Cancelar"
-        class="p-button-secondary"
-        (click)="cancel()"
-        icon="pi pi-times"
-      ></button>
-    </p-footer>
-  </form>
-</p-dialog>
+        <!-- Bebidas -->
+        <div class="mb-8">
+            <label class="font-semibold w-24 block mb-2">Bebidas</label>
+            <div *ngFor="let drink of drinksFields; let i = index" class="flex items-center gap-4 mb-2">
+                <p-select
+                    optionLabel="description"
+                    [options]="drinksOptions" 
+                    [(ngModel)]="order.drinks[i]" 
+                    placeholder="Nome da Bebida" 
+                    class="flex-auto border-4"
+                >
+                </p-select>
+                <input type="number" [(ngModel)]="order.drinks[i].quantity" placeholder="Qtd" class="w-24 text-center border-4" />
+                <button type="button" pButton icon="pi pi-trash" (click)="removeDrink(i)" severity="danger" class="p-button-sm"></button>
+            </div>
+            <button type="button" pButton icon="pi pi-plus" label="Adicionar" (click)="addDrink()" severity="secondary" class="mt-2"></button>
+        </div>
+        <div *ngFor="let observation of observationsFields; let i = index" class="flex items-center gap-4 mb-2">
+            <label for="observations" class="font-semibold w-24">Observações</label>
+            <input
+                [(ngModel)]="order.observations[i]"
+                pInputText
+                id="observations" 
+                class="flex-auto border-4" 
+                autocomplete="off" 
+            />              
+            <button type="button" pButton icon="pi pi-trash" (click)="removeObservation(i)" severity="danger" class="p-button-sm"></button>
+        </div>
+            <button type="button" pButton icon="pi pi-plus" label="Adicionar" (click)="addObservation()" severity="secondary" class="mt-2"></button>
+        <div class="flex items-center gap-4 mb-8">
+            <label class="font-semibold w-24">Data</label>
+            <p-date-picker [(ngModel)]="order.orderDate" [showTime]="true" [hourFormat]="hourFormatter" dateFormat="dd.mm.yy" />
+        </div>
+        <ng-template #footer>
+            <p-button label="Cancel" [text]="true" severity="secondary" (click)="changeVisible()" />
+            <p-button label="Save" [outlined]="true" severity="secondary" (click)="save()" />
+        </ng-template>
+    </p-dialog>
+</div>
+<p-toast />
