@@ -57,6 +57,28 @@
             >
             </textarea>
         </div>
+        <div *ngIf="field.type === 'phone'" class="w-full flex items-center gap-4 mb-4">
+            <p-inputMask
+              [(ngModel)]="formData[field.name]"
+              pSize="large"
+              mask="(99) 99999-9999"
+              placeholder="Preencha o telefone"
+              styleClass="w-full" 
+              rows="10"
+            >
+            </p-inputMask>
+        </div>
+        <div *ngIf="field.type === 'cep'" class="w-full flex items-center gap-4 mb-4">
+            <p-inputMask
+              [(ngModel)]="formData[field.name]"
+              pSize="large"
+              mask="99999-999"
+              placeholder="Preencha o CEP"
+              styleClass="w-full" 
+              rows="10"
+            >
+            </p-inputMask>
+        </div>
     </ng-container>
     <ng-template #footer>
         <p-button label="Cancel" [text]="true" severity="secondary" (click)="changeVisible()" />

@@ -1,0 +1,151 @@
+<p-dialog
+  header="Cadastro de Pedido"
+  [(visible)]="displayModal"
+  [modal]="true"
+  [closable]="false"
+  [style]="{ width: '50vw' }"
+>
+  <form (ngSubmit)="save()">
+    <div class="p-fluid">
+      <!-- Descrição do pedido -->
+      <div class="p-field">
+        <label for="description">Descrição</label>
+        <input
+          id="description"
+          type="text"
+          [(ngModel)]="pedido.description"
+          name="description"
+          pInputText
+          required
+        />
+      </div>
+
+      <!-- Cliente -->
+      <div class="p-field">
+        <label for="client">Cliente</label>
+        <input
+          id="client"
+          type="text"
+          [(ngModel)]="pedido.client"
+          name="client"
+          pInputText
+          required
+        />
+      </div>
+
+      <!-- Hambúrgueres (dinâmico) -->
+      <h3>Hambúrgueres</h3>
+      <div *ngFor="let item of pedido.hamburgers; let i = index" class="p-field">
+        <div class="p-inputgroup">
+          <p-dropdown
+            [options]="hamburgers"
+            [(ngModel)]="item.hamburger"
+            [name]="'hamburger' + i"
+            optionLabel="name"
+            placeholder="Selecione o Hambúrguer"
+          ></p-dropdown>
+
+          <input
+            type="number"
+            min="1"
+            [(ngModel)]="item.quantity"
+            [name]="'quantityHamburger' + i"
+            pInputText
+            placeholder="Quantidade"
+            style="width: 100px"
+          />
+
+          <button
+            type="button"
+            pButton
+            icon="pi pi-minus"
+            class="p-button-danger"
+            (click)="removeHamburger(i)"
+          ></button>
+        </div>
+      </div>
+
+      <!-- Botão para adicionar hambúrgueres -->
+      <button
+        type="button"
+        pButton
+        icon="pi pi-plus"
+        label="Adicionar Hambúrguer"
+        class="p-button-primary"
+        (click)="addHamburger()"
+      ></button>
+
+      <!-- Bebidas (dinâmico) -->
+      <h3>Bebidas</h3>
+      <div *ngFor="let item of pedido.drinks; let i = index" class="p-field">
+        <div class="p-inputgroup">
+          <p-dropdown
+            [options]="drinks"
+            [(ngModel)]="item.drink"
+            [name]="'drink' + i"
+            optionLabel="name"
+            placeholder="Selecione a Bebida"
+          ></p-dropdown>
+
+          <input
+            type="number"
+            min="1"
+            [(ngModel)]="item.quantity"
+            [name]="'quantityDrink' + i"
+            pInputText
+            placeholder="Quantidade"
+            style="width: 100px"
+          />
+
+          <button
+            type="button"
+            pButton
+            icon="pi pi-minus"
+            class="p-button-danger"
+            (click)="removeDrink(i)"
+          ></button>
+        </div>
+      </div>
+
+      <!-- Botão para adicionar bebidas -->
+      <button
+        type="button"
+        pButton
+        icon="pi pi-plus"
+        label="Adicionar Bebida"
+        class="p-button-primary"
+        (click)="addDrink()"
+      ></button>
+
+      <!-- Observações -->
+      <div class="p-field">
+        <label for="observations">Observações</label>
+        <textarea
+          id="observations"
+          rows="4"
+          [(ngModel)]="pedido.observations"
+          name="observations"
+          pInputTextarea
+        ></textarea>
+      </div>
+    </div>
+
+    <p-footer>
+      <button
+        type="submit"
+        pButton
+        label="Salvar"
+        class="p-button-success"
+        icon="pi pi-check"
+      ></button>
+      <button
+        type="button"
+        pButton
+        label="Cancelar"
+        class="p-button-secondary"
+        (click)="cancel()"
+        icon="pi pi-times"
+      ></button>
+    </p-footer>
+  </form>
+</p-dialog>

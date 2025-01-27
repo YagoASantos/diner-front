@@ -1,1 +1,85 @@
-<p>clientes works!</p>
+<div class="card">
+    <p-table
+      [value]="clients"
+      [(selection)]="selectedClients"
+      [tableStyle]="{ 'min-width': '50rem' }"
+      [paginator]="true"
+      [rows]="5"
+      class="w-full"
+    >
+        <ng-template #caption>
+            <div class="flex items-center justify-between">
+                <span class="text-xl font-bold">Clientes</span>
+            </div>
+        </ng-template>
+        <ng-template #header>
+            <tr>
+                <th>
+                </th>
+                <th>
+                    <p-columnFilter
+                        [showMenu]="false"
+                        type="text"
+                        field="code"
+                        placeholder="Pesquise pelo código"
+                    ></p-columnFilter>
+                </th>
+                <th>
+                    <p-columnFilter
+                        [showMenu]="false"
+                        type="text"
+                        field="name"
+                        placeholder="Pesquise pelo nome"
+                    ></p-columnFilter>
+                </th>
+                <th>
+                </th>
+                <th>
+                    <p-speeddial [model]="items" direction="left" />
+                </th>
+            </tr>
+            <tr class="w-full">
+                <th style="width: 4rem"><p-tableHeaderCheckbox /></th>
+                <th class="w-2/6">Código</th>
+                <th class="w-2/6">Nome</th>
+                <th class="w-2/6">Telefone</th>
+                <th class="w-2/6">Endereço</th>
+            </tr>
+        </ng-template>
+        <ng-template #body let-client>
+            <tr>
+                <td>
+                    <p-tableCheckbox [value]="client" />
+                </td>
+                <td>{{ client.code }}</td>
+                <td>{{ client.name }}</td>
+                <td>{{ client.phone }}</td>
+                <td>
+                    <p-button (onClick)="displayAddress($event, client)" icon="pi pi-search" severity="secondary" rounded />
+                </td>
+                <td>
+                    <!-- <p-button (onClick)="displayProduct($event, product)" icon="pi pi-search" severity="secondary" rounded /> -->
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
+
+<app-insert-modal
+  *ngIf="insertModalVisible"
+  title="Inserir Cliente"
+  [visible]="insertModalVisible"
+  (visibleEventEmitter)="insertModalVisible = $event"
+  (saveEventEmitter)="save($event)"
+  [fields]="fields"
+  [updateObject]="selectedClients[0] || null"
+/>
+<app-describe-modal 
+    *ngIf="describeModalVisible"
+    title="Endereço"
+    [fields]="fieldsAddress"
+    [visible]="describeModalVisible"
+    (visibleEventEmitter)="describeModalVisible = $event"
+/>
+<p-toast />
+

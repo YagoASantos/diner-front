@@ -11,6 +11,10 @@ import { Iingredient } from '../../interfaces/ingredient';
 import { Ihamburger } from '../../interfaces/hamburger';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { TextareaModule } from 'primeng/textarea';
+import { Idrink } from '../../interfaces/drink';
+import { Iclient } from '../../interfaces/client';
+import { InputMask } from 'primeng/inputmask';
+import { Iorder } from '../../interfaces/order';
 
 @Component({
   selector: 'app-insert-modal',
@@ -23,7 +27,8 @@ import { TextareaModule } from 'primeng/textarea';
     FormsModule,
     InputNumberModule,
     MultiSelectModule,
-    TextareaModule
+    TextareaModule,
+    InputMask
   ],
   templateUrl: './insert-modal.component.html',
   styleUrl: './insert-modal.component.scss'
@@ -32,7 +37,7 @@ export class InsertModalComponent implements OnInit {
   @Input() title: string = '';
   @Input() visible: boolean = false;
   @Input() fields: Ifield[] = [];
-  @Input() updateObject: Iingredient | Ihamburger | null = null;
+  @Input() updateObject: Iingredient | Ihamburger | Idrink | Iclient | Iorder | null = null;
   @Output() visibleEventEmitter = new EventEmitter<boolean>();
   @Output() saveEventEmitter = new EventEmitter<any>();
 
@@ -41,7 +46,7 @@ export class InsertModalComponent implements OnInit {
   public ngOnInit(): void {
     if (this.updateObject) {
       this.fields.forEach((field) => {
-        const fieldName = field.name as keyof (Iingredient | Ihamburger);
+        const fieldName = field.name as keyof (Iingredient | Ihamburger | Idrink | Iclient);
         if (this.updateObject && this.updateObject[fieldName] !== undefined) {
           this.formData[field.name] = this.updateObject[fieldName];
         }

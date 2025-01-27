@@ -5,6 +5,7 @@ export interface Ihamburger {
     code?: number;
     description: string;
     price: number;
+    quantityOfHamburgers?: number,
     ingredients: number[] | Iingredient[];
 }
 

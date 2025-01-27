@@ -9,7 +9,7 @@ export interface Iorder {
     client: Iclient;
     hamburgers: Ihamburger[];
     drinks: Idrink[];
-    observation: { message: string }[];
+    observations: { message: string }[];
     orderDate: string;
     totalPrice: number;
 }

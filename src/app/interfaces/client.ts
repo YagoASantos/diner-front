@@ -5,7 +5,7 @@ export interface Iclient {
     code?: number;
     name: string;
     phone: string;
-    address: Iaddress;
+    address?: Iaddress;
 }
 
 export interface IclientPage extends Ipage {

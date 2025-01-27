@@ -4,7 +4,7 @@
       [(selection)]="selectedHamburgers"
       [tableStyle]="{ 'min-width': '50rem' }"
       [paginator]="true"
-      [rows]="size"
+      [rows]="5"
       class="w-full"
     >
         <ng-template #caption>
@@ -54,16 +54,9 @@
                 <td>{{ hamburger.code }}</td>
                 <td>{{ hamburger.description }}</td>
                 <td>{{ hamburger.price | currency:'BRL':'symbol':'1.2-2' }}</td>
+                <td>{{ printIngredients(hamburger.ingredients) }}</td>
                 <td>
-                    <p-chip 
-                      label="{{hamburger.isAdditional ? 'Sim' : 'Não'}}" 
-                      icon="pi {{hamburger.isAdditional ? 'pi-check-square' : 'pi-times'}}" 
-                      [class.bg-primary-400]="hamburger.isAdditional"
-                      [class.bg-red-400]="!hamburger.isAdditional"
-                    />
-                </td>
-                <td>
-                    <!-- <p-button (onClick)="displayProduct($event, product)" icon="pi pi-search" severity="secondary" rounded /> -->
+                    <!-- <p-button (onClick)="($event, product)" icon="pi pi-search" severity="secondary" rounded /> -->
                 </td>
             </tr>
         </ng-template>
